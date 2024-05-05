@@ -21,6 +21,8 @@ async function auth(request, response, next) {
   next();
 }
 
+// async function
+
 async function checkIfUserExists(request, response, next) {
   const { username, email } = request.body;
 
@@ -33,22 +35,18 @@ async function checkIfUserExists(request, response, next) {
 
   if (docs.length) {
     if (docs.filter((elem) => elem.email === email).length)
-      return response
-        .status(501)
-        .json({
-          status: false,
-          message: "sorry , such user email alredy exists",
-          payload: { subject: "email" },
-        });
+      return response.status(501).json({
+        status: false,
+        message: "sorry , such user email alredy exists",
+        payload: { subject: "email" },
+      });
 
     if (docs.filter((elem) => elem.username === username).length)
-      return response
-        .status(501)
-        .json({
-          status: false,
-          message: "sorry , such USER - NAME alredy exists",
-          payload: { subject: "username" },
-        });
+      return response.status(501).json({
+        status: false,
+        message: "sorry , such USER - NAME alredy exists",
+        payload: { subject: "username" },
+      });
   }
 
   next();
