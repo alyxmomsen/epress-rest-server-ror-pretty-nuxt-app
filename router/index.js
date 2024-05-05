@@ -32,6 +32,21 @@ const fireStore = getFirestore(app);
 
 // routes
 
+router.get("/auth-chek" , async (request , response) => {
+
+
+  return customResponse(response , 501 , true , 'hello from check' , {
+    content:{
+      type:'check' ,
+      data:{
+        firstname:'john' ,
+        lastname:'doe' ,
+      }
+    } ,
+    subject:null
+  });
+});
+
 router.post("/login", async (request, response) => {
   const body = request.body;
 
