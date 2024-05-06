@@ -1,7 +1,7 @@
 const { collection, addDoc } = require("firebase/firestore");
 const fireStore = require("../../../../db");
 const { customResponse } = require("../../../../utils");
-const { useResolvers } = require("../auth-check");
+const { useResolvers } = require("../../notifycations");
 
 
 
@@ -75,8 +75,6 @@ function hooksExecutor(payload) {
 
   console.log("registration success");
 }
-
-
 
 module.exports = {
   registration ,

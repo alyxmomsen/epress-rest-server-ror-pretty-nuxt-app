@@ -1,6 +1,11 @@
+import("express") ;
+
+const jwt = require('jsonwebtoken')
+
 const { initializeApp } = require("firebase/app");
 
 const { getFirestore, collection, getDocs } = require("firebase/firestore");
+const { customResponse } = require("../utils");
 
 const firebaseConfig = {
   apiKey: "AIzaSyAvWDq-aHova7lPIXasdlzht7WhRKj6n0I",
@@ -17,7 +22,52 @@ const app = initializeApp(firebaseConfig);
 
 const fireStore = getFirestore(app);
 
+
+/**
+ * 
+ * @param {Express.Request} request 
+ * @param {Express.Response} response 
+ * @param {*} next 
+ */
 async function auth(request, response, next) {
+
+  const { authorization}  = request.headers ;
+
+  console.log({authorization});
+  console.log('checking checking' , authorization);
+  
+  
+  if(!authorization) return customResponse(response , 501 , false , 'u must send token' , null);
+  
+  console.log('checking checking' , authorization);
+
+  const token = authorization ;
+
+  const secret = process.env.SECRET_KEY ;
+
+  try {
+    
+    const result = jwt.verify(token , secret) ;
+
+    console.log({result});
+  }
+  catch (err) {
+
+    console.log({err});
+
+    return customResponse(response , 501 , false , 'token expired' , {
+      subject:'token_expired' ,
+      content:{
+        type:'' ,
+        data:null ,
+      }
+    });
+
+  }
+
+
+  // console.log({result});
+
   next();
 }
 

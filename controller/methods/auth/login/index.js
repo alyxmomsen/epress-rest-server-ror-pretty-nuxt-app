@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { customResponse } = require("../../../../utils");
 const { getDocs, collection } = require("firebase/firestore");
+const fireStore = require("../../../../db");
 
 async function login(request, response) {
   const body = request.body;
@@ -70,7 +71,7 @@ async function login(request, response) {
   const SECRET_KEY = process.env.SECRET_KEY || "MY-SECRET-KEY";
 
   const token = jwt.sign({ userID: userFiltredByPassword[0].id }, SECRET_KEY, {
-    expiresIn: "10s",
+    expiresIn: "20s",
     // algorithm:'ES256'
   });
 

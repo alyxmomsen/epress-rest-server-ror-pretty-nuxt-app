@@ -1,4 +1,4 @@
-const { checkIfUserExists } = require("../middleware");
+const { checkIfUserExists, auth } = require("../middleware");
 
 const jwt = require("jsonwebtoken");
 
@@ -18,8 +18,8 @@ const { customResponse } = require("../utils");
 const controller = require("../controller");
 
 // routes
-
-router.post("/auth-check", controller.authCheck);
+router.post("/notifications" , controller.notifications);
+router.get("/auth-check", auth , controller.authCheck);
 router.post("/login", controller.login);
 router.post("/registration", checkIfUserExists, controller.registration);
 router.post("/account", controller.account);
