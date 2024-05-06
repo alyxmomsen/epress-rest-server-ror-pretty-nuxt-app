@@ -55,7 +55,7 @@ async function registration(request, response) {
 
   // hook
 
-  hooksExecutor();
+  hooksExecutor(addedResult);
 
   // success
 
@@ -69,14 +69,9 @@ async function registration(request, response) {
 }
 
 
-function hooksExecutor() {
+function hooksExecutor(payload) {
 
-  hooks.forEach(hook => hook('hello friend'));
-
-
-  // resolvers.forEach((elem) => {
-  //   elem('hello from my registration');
-  // });
+  hooks.forEach(hook => hook(payload));
 
   console.log("registration success");
 }

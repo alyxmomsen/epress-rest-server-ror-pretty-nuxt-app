@@ -5,43 +5,28 @@ const hooks = [] ;
 async function authCheck(request, response) {
 
 
-  const p = () => new Promise((resolve) => {
+  const res = await (async () => new Promise((resolve) => {
 
-    const resolver = (message) => {
-      resolve('hello from my resolver : ' + message);
+    const resolver = (payload) => {
+      resolve(payload);
     }
 
     hooks.push(resolver);
 
-  })
-
-  const res = await p()
+  }))()
 
 
-  console.log('auth-check response: ' , res);
+  // console.log('auth-check response: ' , res);
 
 
   return customResponse(response, 501, true, "hello from check" , {
     content: {
-      type: "check",
-      data: {
-        firstname: "john",
-        lastname: "doe",
-      },
+      type: "feedback",
+      data: res,
     },
     subject: null,
   });
 }
-
-const waiting = async () => {
-
-
-  return new Promise((res , rej) => {
-
-  }) ;
-
-}
-
 
 function useResolvers () {
 
