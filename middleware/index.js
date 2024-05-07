@@ -1,6 +1,6 @@
-import("express") ;
+import("express");
 
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 
 const { initializeApp } = require("firebase/app");
 
@@ -22,49 +22,42 @@ const app = initializeApp(firebaseConfig);
 
 const fireStore = getFirestore(app);
 
-
 /**
- * 
- * @param {Express.Request} request 
- * @param {Express.Response} response 
- * @param {*} next 
+ *
+ * @param {Express.Request} request
+ * @param {Express.Response} response
+ * @param {*} next
  */
 async function auth(request, response, next) {
+  const { authorization } = request.headers;
 
-  const { authorization}  = request.headers ;
+  console.log({ authorization });
+  console.log("checking checking", authorization);
 
-  console.log({authorization});
-  console.log('checking checking' , authorization);
-  
-  
-  if(!authorization) return customResponse(response , 501 , false , 'u must send token' , null);
-  
-  console.log('checking checking' , authorization);
+  if (!authorization)
+    return customResponse(response, 501, false, "u must send token", null);
 
-  const token = authorization ;
+  console.log("checking checking", authorization);
 
-  const secret = process.env.SECRET_KEY ;
+  const token = authorization;
+
+  const secret = process.env.SECRET_KEY;
 
   try {
-    
-    const result = jwt.verify(token , secret) ;
+    const result = jwt.verify(token, secret);
 
-    console.log({result});
-  }
-  catch (err) {
+    console.log({ result });
+  } catch (err) {
+    console.log({ err });
 
-    console.log({err});
-
-    return customResponse(response , 501 , false , 'token expired' , {
-      subject:'token_expired' ,
-      content:{
-        type:'' ,
-        data:null ,
-      }
+    return customResponse(response, 501, false, "token expired", {
+      subject: "token_expired",
+      content: {
+        type: "",
+        data: null,
+      },
     });
-
   }
-
 
   // console.log({result});
 
@@ -102,7 +95,26 @@ async function checkIfUserExists(request, response, next) {
   next();
 }
 
+/**
+ *
+ * @param {Express.Request} request
+ * @param {Express.Response} response
+ * @param { * } next
+ */
+async function auth2(request, response, next) {
+  const headers = request.headers;
+
+  if (!headers) return customResponse(response, 500, false, "No Headers", null);
+
+  const auth_token = headers.authentification;
+
+  console.log({ auth_token });
+
+  next();
+}
+
 module.exports = {
   auth,
+  auth2,
   checkIfUserExists,
 };

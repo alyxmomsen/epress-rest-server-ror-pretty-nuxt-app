@@ -3,8 +3,6 @@ const fireStore = require("../../../../db");
 const { customResponse } = require("../../../../utils");
 const { useResolvers } = require("../../notifycations");
 
-
-
 const hooks = useResolvers();
 
 // const resolvers = result();
@@ -51,11 +49,11 @@ async function registration(request, response) {
     email,
   });
 
-  console.log({ addedResult: addedResult.id });
+  console.log({ addedResult: addedResult });
 
   // hook
 
-  hooksExecutor(addedResult);
+  hooksExecutor(username);
 
   // success
 
@@ -69,14 +67,25 @@ async function registration(request, response) {
 }
 
 
+/**
+ * 
+ * @param {any} payload - полезная нагрузка для вывода сообщения
+ * @description обрабатывает глобальный массив  хуков 
+ * состоящих из Promise executor resolve калбеков
+ */
 function hooksExecutor(payload) {
 
-  hooks.forEach(hook => hook(payload));
+  /**
+   * 
+   * @param {(value:any) => void} hook - Promise executor resolve callback 
+   */
+  const callbackfn = (hook) => hook(payload);
+
+  hooks.forEach(callbackfn);
 
   console.log("registration success");
 }
 
 module.exports = {
-  registration ,
+  registration,
 };
-

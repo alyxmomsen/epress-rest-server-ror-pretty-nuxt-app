@@ -1,31 +1,41 @@
 const { customResponse } = require("../../../utils");
 
+const hooks = [];
 
-const hooks = [] ;
+async function notifications(request, response) {
+  
 
-async function notifications (request , response) {
+  const res = await (async () => new Promise(executor))();
 
-
-    const res = await (async () => new Promise((resolve) => {
-
-        const resolver = (payload) => {
-          resolve(payload);
-        }
-    
-        hooks.push(resolver);
-    
-      }))()
-
-    return customResponse(response , 200 , true , 'notify' , null);
-    
+  return customResponse(response, 200, true, "notify", {
+    subject: "notify",
+    content: {
+      type: "noify",
+      data: {
+        username: res,
+      },
+    },
+  });
 }
 
-function useResolvers () {
-
-    return hooks ;
-  }
+const useResolvers = () => hooks;
 
 module.exports = {
-    notifications ,
-    useResolvers
-} ;
+  notifications,
+  useResolvers,
+};
+
+/**
+   *
+   * @param {(username:string) => void} resolve
+   * @param {*} reject
+   */
+
+function executor(resolve, reject) {
+  console.log({ executor: "executors" });
+  const resolver = (payload) => {
+    resolve(payload);
+  };
+
+  hooks.push(resolver);
+}
