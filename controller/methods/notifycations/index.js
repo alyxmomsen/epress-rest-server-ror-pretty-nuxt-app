@@ -37,5 +37,7 @@ function executor(resolve, reject) {
     resolve(payload);
   };
 
+  console.log('pushing');
+
   hooks.push(resolver);
 }
