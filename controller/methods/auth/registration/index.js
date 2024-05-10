@@ -3,6 +3,10 @@ const fireStore = require("../../../../db");
 const { customResponse } = require("../../../../utils");
 const { useResolvers } = require("../../notifycations");
 
+const bcrypt = require('bcrypt');
+
+
+
 const hooks = useResolvers();
 
 // const resolvers = result();
@@ -43,9 +47,15 @@ async function registration(request, response) {
 
   const userCollection = collection(fireStore, "users");
 
+  const hash = bcrypt.hashSync(password , 10);
+
+  // const result = bcrypt.compareSync(password , hash);
+
+  // console.log({hash , result});
+
   const addedResult = await addDoc(userCollection, {
     username,
-    password,
+    password:hash,
     email,
   });
 

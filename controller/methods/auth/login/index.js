@@ -3,6 +3,8 @@ const { customResponse } = require("../../../../utils");
 const { getDocs, collection } = require("firebase/firestore");
 const fireStore = require("../../../../db");
 
+const bcrypt = require("bcrypt");
+
 async function login(request, response) {
   const body = request.body;
 
@@ -52,11 +54,18 @@ async function login(request, response) {
       subject: "email",
     });
 
-  const userFiltredByPassword = usersByEmail.filter(
-    (elem) => elem.password === password,
-  );
+    
+    if(!usersByEmail.length > 1) return customResponse(response , 500 ,false , "internal error , sorry about that" , null);
 
-  if (!userFiltredByPassword.length)
+    const theUser = usersByEmail[0] ;
+   
+    const passwordhash = theUser.password ;
+
+    console.log({passwordhash});
+
+    const rresult= bcrypt.compareSync(password  , passwordhash)
+
+  if (!rresult)
     return customResponse(response, 400, false, "wrong password", {
       content: {
         type: "users_list",
@@ -65,12 +74,9 @@ async function login(request, response) {
       subject: "password",
     });
 
-  if (userFiltredByPassword.length > 1)
-    return customResponse(response, 500, false, "enternal error", null);
-
   const SECRET_KEY = process.env.SECRET_KEY || "MY-SECRET-KEY";
 
-  const token = jwt.sign({ userID: userFiltredByPassword[0].id }, SECRET_KEY, {
+  const token = jwt.sign({ userID: theUser.id }, SECRET_KEY, {
     expiresIn: "20s",
     // algorithm:'ES256'
   });
