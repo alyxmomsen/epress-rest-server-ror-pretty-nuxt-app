@@ -63,6 +63,8 @@ async function registration(request, response) {
 
   // hook
 
+  // console.log();
+
   hooksExecutor(username);
 
   // success
@@ -85,10 +87,14 @@ async function registration(request, response) {
  */
 function hooksExecutor(payload) {
 
+  console.log({hooks});
+
   /**
    * 
    * @param {(value:any) => void} hook - Promise executor resolve callback 
+   * @returns 
    */
+
   const callbackfn = (hook) => hook(payload);
 
   hooks.forEach(callbackfn);
