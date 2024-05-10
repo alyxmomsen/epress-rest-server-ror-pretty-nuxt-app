@@ -1,13 +1,13 @@
 const { collection, addDoc } = require("firebase/firestore");
 const fireStore = require("../../../../db");
 const { customResponse } = require("../../../../utils");
-const { useResolvers } = require("../../notifycations");
+
 
 const bcrypt = require('bcrypt');
 
 
 
-const hooks = useResolvers();
+
 
 // const resolvers = result();
 
@@ -21,6 +21,10 @@ const hooks = useResolvers();
  */
 
 async function registration(request, response) {
+
+  const { useResolvers } = require("../../notifycations");
+  const hooks = useResolvers();
+
   const body = request.body;
 
   if (!body)
@@ -65,7 +69,7 @@ async function registration(request, response) {
 
   // console.log();
 
-  hooksExecutor(username);
+  hooksExecutor(hooks , username);
 
   // success
 
@@ -85,7 +89,7 @@ async function registration(request, response) {
  * @description обрабатывает глобальный массив  хуков 
  * состоящих из Promise executor resolve калбеков
  */
-function hooksExecutor(payload) {
+function hooksExecutor(hooks ,payload) {
 
   console.log({hooks});
 
