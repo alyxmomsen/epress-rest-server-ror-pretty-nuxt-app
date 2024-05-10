@@ -37,7 +37,9 @@ function executor(resolve, reject) {
     resolve(payload);
   };
 
-  console.log('pushing');
+  console.log('subscribe pushing');
 
-  hooks.push(resolver);
+  hooks.push(resolver) ;
+
+  console.log(hooks);
 }
